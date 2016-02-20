@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopServer", "DesktopServer\DesktopServer.csproj", "{E0A064F3-296B-402D-98C5-3B5A0617D0FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspServer", "AspServer\AspServer.csproj", "{291B2352-55CF-4335-9D68-DBA53E0E8BBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0A064F3-296B-402D-98C5-3B5A0617D0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A064F3-296B-402D-98C5-3B5A0617D0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A064F3-296B-402D-98C5-3B5A0617D0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A064F3-296B-402D-98C5-3B5A0617D0FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{291B2352-55CF-4335-9D68-DBA53E0E8BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{291B2352-55CF-4335-9D68-DBA53E0E8BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{291B2352-55CF-4335-9D68-DBA53E0E8BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{291B2352-55CF-4335-9D68-DBA53E0E8BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
