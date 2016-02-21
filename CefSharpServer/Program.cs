@@ -4,10 +4,7 @@ using System.IO;
 using System.Threading;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using System.Drawing;
-using OpenTK.Input;
 using static System.Drawing.Color;
 using System.Runtime.CompilerServices;
 using CefSharp;
@@ -16,10 +13,9 @@ using System.Drawing.Imaging;
 using static CefSharpServer.Debug;
 namespace CefSharpServer
 {
-    public class Program : GameWindow
+    public class Program 
     {
         const int Port = 8084;
-        int textureId = -1;
         static ChromiumWebBrowser browser;
         [STAThread]
         public static void Main(string[] args)
@@ -81,57 +77,6 @@ namespace CefSharpServer
             screenShot.Dispose();
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            VSync = VSyncMode.On;
-            Title = $"CefSharpServer <Using {GL.GetString(StringName.Version)}>";
-
-            var browser = new OpenGlChromiumWebBrowser(this, "en.m.wikipedia.org");
-            textureId = browser.textureId;
-            //Load Gen+Load fail texture.
-            //Format32bppPArgb
-
-            base.OnLoad(e);
-        }
-        protected override void OnResize(EventArgs e)
-        {
-            GL.Viewport(0, 0, Width, Height);
-            base.OnResize(e);
-        }
-
-        protected override void OnUpdateFrame(FrameEventArgs e)
-        {
-            if (Keyboard[Key.Escape])
-                Exit();
-            base.OnUpdateFrame(e);
-        }
-
-
-        static void setupFrame()
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.Enable(EnableCap.Texture2D);
-            GL.LoadIdentity();
-            GL.Ortho(0, 1, 0, 1, -1, 1);
-            GL.Color3(White);
-        }
-
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            //render graphics
-            setupFrame();
-            GL.BindTexture(TextureTarget.Texture2D, textureId);
-            GraphicsUtils.MissingTexture("???").CopyTo(textureId);
-            GL.Begin(PrimitiveType.Quads);
-            Action<double, double> t = (x, y) => { GL.Vertex2(x, y); GL.TexCoord2(y, x); };
-            t(0, 0);t(0, 1);t(1, 1);t(1, 0);
-
-            GL.End();
-
-            base.OnRenderFrame(e);
-
-            SwapBuffers();
-        }
+     
     }
 }
