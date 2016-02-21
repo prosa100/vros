@@ -1,19 +1,22 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Threading;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using static System.Drawing.Color;
+
+using CefSharp;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System.Drawing;
-using OpenTK.Input;
-using static System.Drawing.Color;
-using System.Runtime.CompilerServices;
-using CefSharp;
-using System.Net;
-using System.Drawing.Imaging;
 using static CefSharpServer.Debug;
+
+using OpenTK;
+using OpenTK.Input;
+using OpenTK.Graphics.OpenGL;
+
 namespace CefSharpServer
 {
     public class Program : GameWindow
