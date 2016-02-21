@@ -20,7 +20,6 @@ namespace CefSharpServer
         [STAThread]
         public static void Main(string[] args)
         {
-            //var app = new Program();
             if (!Cef.IsInitialized)
                 Cef.Initialize(new CefSettings()
                 {
@@ -32,16 +31,14 @@ namespace CefSharpServer
             
             browser = new ChromiumWebBrowser();
             browser.Size = new Size(512, 512);
+           
             while (!browser.IsBrowserInitialized)
                 Thread.Sleep(0);
             browser.Load("en.m.wikipedia.org");
-            //browser.Load("https://www.youtube.com/watch?v=fPmruHc4S9Q");
+
             browser.Load("http://www.timeanddate.com/worldclock/fullscreen.html?n=3704");
             browser.NewScreenshot += Browser_NewScreenshot;
-           // CefBrowserHostWrapper cbhw;
-            //CefSharpBrowserWrapper csbw;
             
-
             Log("Hello");
             using (HttpListener listener = new HttpListener())
             {
@@ -49,22 +46,78 @@ namespace CefSharpServer
                 listener.Start();
                 while (listener.IsListening)
                 {
-                    Log("Go Go GO!!!");
-                    var ctx = listener.GetContext();
-                    var url = ctx.Request.QueryString["url"];
-                    if (url != null)
-                        browser.Load(url);
+                    /**
+                     * Commands:
+                     *    http:localhost:8084/goto?url=[dest]
+                     *         -- this loads the page specified by url.
+                     *    http:localhost:8084/click?pos=[x] [y]
+                     *         -- this clicks on coordinate (x, y)
+                     *    http:localhost:8084/scroll?dir=[direction]
+                     *         -- scrolls 50 px up, down, left or right.
+                     */
+                    var ctx  = listener.GetContext();
+                    var rqst = ctx.Request.RawUrl;
+                    int indx = rqst.IndexOf("?")  - 1;
+                    string cmd;
+                    if (indx > 0)
+                        cmd = rqst.Substring(1, indx);
+                    else
+                        continue;
+                    switch (cmd)
+                    {
+                        case ("goto"):
+                            var url = ctx.Request.QueryString["url"];
+                            if (url != null)
+                                browser.Load(url);
+                            goto default;
+                        case ("click"):
+                            var clk_s = ctx.Request.QueryString["pos"];
+                            int clk_x, clk_y;
+
+                            try {
+                                if (int.TryParse(clk_s.Substring(0, clk_s.IndexOf(" ")), out clk_x) &&
+                                    int.TryParse(clk_s.Substring(clk_s.IndexOf(" ")), out clk_y))
+                                {
+                                    browser.ExecuteScriptAsync("document.elementFromPoint(" + clk_x + ", " + clk_y + ").click()");
+                                }
+                            } catch
+                            {
+                                /** Malformed Requests will be ignored. **/
+                            }
+                            goto default;
+                        case ("scroll"):
+                            var dir = ctx.Request.QueryString["dir"];
+                            switch (dir)
+                            {
+                                case ("up"):
+                                    browser.ExecuteScriptAsync("scrollBy(0,-50)");
+                                    break;
+                                case ("down"):
+                                    browser.ExecuteScriptAsync("scrollBy(0, 50)");
+                                    break;
+                                case ("left"):
+                                    browser.ExecuteScriptAsync("scrollBy(-50,0)");
+                                    break;
+                                case ("right"):
+                                    browser.ExecuteScriptAsync("scrollBy(0, 50)");
+                                    break;
+                            }
+                            goto default;
+                        default:
+                            /** Grab the next screenshot **/
+                            for (; browser.IsLoading;)
+                                Thread.Sleep(100);
+                            browser.NewScreenshot += Browser_NewScreenshot;
+                            break;
+                    }
+
                     ctx.Response.ContentType = "image/png";
                     ctx.Response.StatusCode = 200;
                     buffer.Position = 0;
                     buffer.CopyTo(ctx.Response.OutputStream);
-                    //var ss = browser.ScreenshotOrNull();
-                    //ss?.Save(ctx.Response.OutputStream, ImageFormat.Png);
                     ctx.Response.OutputStream.Close();
                 }
             }
-
-            //app.Run(60);
         }
 
         static MemoryStream buffer = new MemoryStream(512 * 512 * 4);
@@ -76,7 +129,7 @@ namespace CefSharpServer
             screenShot.Save(buffer, ImageFormat.Png);
             screenShot.Dispose();
         }
-
+       
      
     }
 }
