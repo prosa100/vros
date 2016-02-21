@@ -22,9 +22,8 @@ namespace DesktopServer
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
 
-        static Image Capture()
+        static Image Capture(SystemWindow w)
         {
-            var w = ForegroundWindow;
             Bitmap bmp = new Bitmap(w.Position.Width, w.Position.Height);
             Graphics g = Graphics.FromImage(bmp);
             IntPtr hdc = g.GetHdc();
@@ -57,15 +56,13 @@ namespace DesktopServer
             var last = DateTime.Now;
             foreach (var window in SystemWindow.AllToplevelWindows)
             {
-                Console.WriteLine(window.Title);
+                using (var image = Capture(window))
+                    image.Save(window.Title + ".png");
             }
-            using (var image = Capture())
-                image.Save("test.png");
 
             while (!Console.KeyAvailable)
             {
-                using (var image = Capture())
-                    image.Save("test.png");
+                
 
                 var now = DateTime.Now;
                 //Console.WriteLine(1/(now - last).TotalSeconds);
