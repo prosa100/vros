@@ -159,7 +159,9 @@
     <Compile Include="Assets\LeapMotion\Scripts\VR\LeapVRCameraControl.cs" />
     <Compile Include="Assets\LeapMotion\Scripts\VR\LeapVRTemporalWarping.cs" />
     <Compile Include="Assets\LeapMotion\Scripts\VR\TemporalWarpingStatus.cs" />
+    <Compile Include="Assets\PlayVideo.cs" />
     <Compile Include="Assets\StreamImage.cs" />
+    <Compile Include="Assets\SuperGrab.cs" />
     <Compile Include="Assets\SuperHands.cs" />
   </ItemGroup>
   <ItemGroup>

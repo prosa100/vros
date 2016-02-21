@@ -8,11 +8,15 @@ using ManagedWinapi.Windows;
 using static ManagedWinapi.Windows.SystemWindow;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Net;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace DesktopServer
 {
     class Program
     {
+        const int Port = 7117;
 
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         static extern bool DeleteObject(IntPtr hObject);
@@ -25,16 +29,35 @@ namespace DesktopServer
         static Image Capture(SystemWindow w)
         {
             Bitmap bmp;
-            if (w.Position.Width != 0 && w.Position.Height != 0) {
+            if (w.Position.Width != 0 && w.Position.Height != 0)
+            {
+
                 bmp = new Bitmap(w.Position.Width, w.Position.Height);
-            } else {
-                return bmp = new Bitmap(512, 512);
+            }
+            else {
+                return bmp = new Bitmap(2, 2);
             }
             Graphics g = Graphics.FromImage(bmp);
             IntPtr hdc = g.GetHdc();
 
             bool success = PrintWindow(w.HWnd, hdc, 0);
+
             g.ReleaseHdc(hdc);
+
+            //Draw the cursor, for the win.
+
+            var mousePos = System.Windows.Forms.Control.MousePosition;
+            mousePos.X -= w.Rectangle.Left;
+            mousePos.Y -= w.Rectangle.Top;
+            
+            
+
+            //g.FillRectangle(Brushes.Magenta, new Rectangle(mousePos, Cursor.Current.Size));
+
+            Cursor.Current.Draw(g, new Rectangle(mousePos, Cursor.Current.Size));
+
+            //g.DrawString(System.Windows.Forms.Control.MousePosition.ToString(), new Font(FontFamily.GenericMonospace, 32), Brushes.Magenta, 0, 0);
+
             g.Dispose();
 
             if (!success)
@@ -56,27 +79,44 @@ namespace DesktopServer
             return bmp;
         }
 
+        static void Status()
+        {
+            foreach (var window in AllToplevelWindows)
+            {
+            }
+        }
+
         static void Main(string[] args)
         {
-            var last = DateTime.Now;
-            foreach (var window in SystemWindow.AllToplevelWindows)
+            using (HttpListener listener = new HttpListener())
             {
-                using (var image = Capture(window))
+                listener.Prefixes.Add($"http://*:{Port}/");
+                listener.Start();
+                while (listener.IsListening)
                 {
-                    if (image.Tag != null)
-                        image.Save(window.Title + ".png");
+                    var ctx = listener.GetContext();
+                    //var url = ctx.Request.QueryString["url"];
+                    //if (url != null)
+                    //    browser.Load(url);
+
+                    //Split into it's own command.
+                    //ForegroundWindow.Size = new Size(512, 512);
+
+                    ctx.Response.ContentType = "image/png";
+                    ctx.Response.StatusCode = 200;
+                    using (var pic = Capture(ForegroundWindow))
+                    {
+                        pic.Save(ctx.Response.OutputStream, ImageFormat.Png);
+                    }
+
+
+
+                    //var ss = browser.ScreenshotOrNull();
+                    //ss?.Save(ctx.Response.OutputStream, ImageFormat.Png);
+                    ctx.Response.OutputStream.Close();
                 }
             }
 
-            while (!Console.KeyAvailable)
-            {
-                
-
-                var now = DateTime.Now;
-                //Console.WriteLine(1/(now - last).TotalSeconds);
-                last = now;
-            }
-            Console.ReadLine();
         }
     }
 }
