@@ -24,7 +24,12 @@ namespace DesktopServer
 
         static Image Capture(SystemWindow w)
         {
-            Bitmap bmp = new Bitmap(w.Position.Width, w.Position.Height);
+            Bitmap bmp;
+            if (w.Position.Width != 0 && w.Position.Height != 0) {
+                bmp = new Bitmap(w.Position.Width, w.Position.Height);
+            } else {
+                return bmp = new Bitmap(512, 512);
+            }
             Graphics g = Graphics.FromImage(bmp);
             IntPtr hdc = g.GetHdc();
 
@@ -57,7 +62,10 @@ namespace DesktopServer
             foreach (var window in SystemWindow.AllToplevelWindows)
             {
                 using (var image = Capture(window))
-                    image.Save(window.Title + ".png");
+                {
+                    if (image.Tag != null)
+                        image.Save(window.Title + ".png");
+                }
             }
 
             while (!Console.KeyAvailable)
