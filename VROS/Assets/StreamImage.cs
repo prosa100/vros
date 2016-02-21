@@ -50,6 +50,14 @@ public class StreamImage : MonoBehaviour
             www = new WWW(url);
         }
 
+        if (Input.GetKeyDown(KeyCode.PageDown))
+        {
+            var w = new WWW(url + "scroll?dir=down");
+        }
+        if (Input.GetKeyDown(KeyCode.PageUp))
+        {
+            var w = new WWW(url + "scroll?dir=up");
+        }
     }
 
     public Texture2D texture;
