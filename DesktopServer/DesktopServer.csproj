@@ -60,9 +60,6 @@
     <Content Include="WinApi\ManagedWinapi.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WinApi\ManagedWinapi.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="WinApi\ManagedWinapi.XML">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

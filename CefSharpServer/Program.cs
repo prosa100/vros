@@ -4,18 +4,15 @@ using System.Net;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using static System.Drawing.Color;
 
-using CefSharp;
-using CefSharp.Internals;
-using CefSharp.OffScreen;
+using static System.Drawing.Color;
 using static CefSharpServer.Debug;
 
 using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
+using CefSharp;
+using CefSharp.OffScreen;
 
 namespace CefSharpServer
 {
@@ -24,6 +21,7 @@ namespace CefSharpServer
         const int Port = 8084;
         int textureId = -1;
         static ChromiumWebBrowser browser;
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -33,10 +31,8 @@ namespace CefSharpServer
                 {
                     UserAgent = "Mozilla/5.0 (Windows; U; Android 5.0.3; en-us; vrshare) AppleWebkit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Mobile Safari/537.36"
                 }, shutdownOnProcessExit: true, performDependencyCheck: true);
-            else
-                Log("Why?");
+            else Log("Why?");
 
-            
             browser = new ChromiumWebBrowser();
             browser.Size = new Size(512, 512);
             while (!browser.IsBrowserInitialized)
@@ -96,6 +92,7 @@ namespace CefSharpServer
 
             base.OnLoad(e);
         }
+
         protected override void OnResize(EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
@@ -108,7 +105,6 @@ namespace CefSharpServer
                 Exit();
             base.OnUpdateFrame(e);
         }
-
 
         static void setupFrame()
         {
@@ -135,6 +131,24 @@ namespace CefSharpServer
             base.OnRenderFrame(e);
 
             SwapBuffers();
+        }
+
+        /**
+         * What to do when the user be lookin'
+         * straight at YOU! Nah, but this is
+         * what gets called when focus is this.
+         */
+        protected void OnActivated()
+        {
+            Console.WriteLine("Ouch, dad!");
+        }
+
+        /**
+         * When the user doesn't care anymore.
+         */
+        protected void OnDeactivated()
+        {
+            Console.WriteLine("Why you no love me no more?");
         }
     }
 }

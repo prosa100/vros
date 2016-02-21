@@ -1,10 +1,12 @@
-﻿using CefSharp;
+﻿using System.Drawing;
+
+using CefSharp;
 using CefSharp.Internals;
+using static CefSharpServer.Debug;
+
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using System;
-using System.Drawing;
-using static CefSharpServer.Debug;
+
 namespace CefSharpServer
 {
     public class OpenGlChromiumWebBrowser : CefSharp.OffScreen.ChromiumWebBrowser
