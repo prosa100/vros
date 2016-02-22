@@ -12,8 +12,8 @@ public class StreamImage : MonoBehaviour
     public void Start()
     {
         //if (!texture)
-          //  texture = new Texture2D(512, 512);
-        //SetTexture(texture);
+           texture = new Texture2D(512, 512);
+        SetTexture(texture);
     }
 
     void SetTexture(Texture2D texture)
@@ -36,8 +36,12 @@ public class StreamImage : MonoBehaviour
         if (www != null && www.isDone)
         {
             if (string.IsNullOrEmpty(www.error))
-                SetTexture(www.textureNonReadable);
+            {
+                //     SetTexture(www.textureNonReadable);
+                www.LoadImageIntoTexture(texture);
+            }
             //texture.Apply();
+            www.Dispose();
             www = null;
         }
 

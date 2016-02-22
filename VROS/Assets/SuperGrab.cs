@@ -24,6 +24,10 @@ public class SuperGrab : MonoBehaviour {
         if (transform.position.y > hightTresh && spawnMe)
         {
             Instantiate(spawnMe, transform.position, transform.rotation);
+        }
+
+        if (spawnMe)
+        {
             transform.position = startPos;
             transform.LookAt(Camera.main.transform.position);
             transform.forward *= -1;

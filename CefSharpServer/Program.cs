@@ -60,55 +60,52 @@ namespace CefSharpServer
                     int indx = rqst.IndexOf("?")  - 1;
                     string cmd;
                     if (indx > 0)
-                        cmd = rqst.Substring(1, indx);
-                    else
-                        continue;
-                    switch (cmd)
                     {
-                        case ("goto"):
-                            var url = ctx.Request.QueryString["url"];
-                            if (url != null)
-                                browser.Load(url);
-                            goto default;
-                        case ("click"):
-                            var clk_s = ctx.Request.QueryString["pos"];
-                            int clk_x, clk_y;
+                        cmd = rqst.Substring(1, indx);
 
-                            try {
-                                if (int.TryParse(clk_s.Substring(0, clk_s.IndexOf(" ")), out clk_x) &&
-                                    int.TryParse(clk_s.Substring(clk_s.IndexOf(" ")), out clk_y))
+                        switch (cmd)
+                        {
+                            case ("goto"):
+                                var url = ctx.Request.QueryString["url"];
+                                if (url != null)
+                                    browser.Load(url);
+                                break;
+                            case ("click"):
+                                var clk_s = ctx.Request.QueryString["pos"];
+                                int clk_x, clk_y;
+
+                                try
                                 {
-                                    browser.ExecuteScriptAsync("document.elementFromPoint(" + clk_x + ", " + clk_y + ").click()");
+                                    if (int.TryParse(clk_s.Substring(0, clk_s.IndexOf(" ")), out clk_x) &&
+                                        int.TryParse(clk_s.Substring(clk_s.IndexOf(" ")), out clk_y))
+                                    {
+                                        browser.ExecuteScriptAsync("document.elementFromPoint(" + clk_x + ", " + clk_y + ").click()");
+                                    }
                                 }
-                            } catch
-                            {
-                                /** Malformed Requests will be ignored. **/
-                            }
-                            goto default;
-                        case ("scroll"):
-                            var dir = ctx.Request.QueryString["dir"];
-                            switch (dir)
-                            {
-                                case ("up"):
-                                    browser.ExecuteScriptAsync("scrollBy(0,-50)");
-                                    break;
-                                case ("down"):
-                                    browser.ExecuteScriptAsync("scrollBy(0, 50)");
-                                    break;
-                                case ("left"):
-                                    browser.ExecuteScriptAsync("scrollBy(-50,0)");
-                                    break;
-                                case ("right"):
-                                    browser.ExecuteScriptAsync("scrollBy(0, 50)");
-                                    break;
-                            }
-                            goto default;
-                        default:
-                            /** Grab the next screenshot **/
-                            for (; browser.IsLoading;)
-                                Thread.Sleep(100);
-                            browser.NewScreenshot += Browser_NewScreenshot;
-                            break;
+                                catch
+                                {
+                                    /** Malformed Requests will be ignored. **/
+                                }
+                                break;
+                            case ("scroll"):
+                                var dir = ctx.Request.QueryString["dir"];
+                                switch (dir)
+                                {
+                                    case ("up"):
+                                        browser.ExecuteScriptAsync("scrollBy(0,-50)");
+                                        break;
+                                    case ("down"):
+                                        browser.ExecuteScriptAsync("scrollBy(0, 50)");
+                                        break;
+                                    case ("left"):
+                                        browser.ExecuteScriptAsync("scrollBy(-50,0)");
+                                        break;
+                                    case ("right"):
+                                        browser.ExecuteScriptAsync("scrollBy(0, 50)");
+                                        break;
+                                }
+                                break;
+                        }
                     }
 
                     ctx.Response.ContentType = "image/png";
