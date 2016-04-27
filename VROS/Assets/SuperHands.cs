@@ -15,6 +15,7 @@ public class SuperHands : MonoBehaviour
     public float grabTresh = 0.95f;
     public float letgoTresh = 0.05f;
     public SuperGrab holding;
+    public GameObject lightSaber;
     // Update is called once per frame
     void Update()
     {
@@ -48,6 +49,13 @@ public class SuperHands : MonoBehaviour
                 superGrab.Grab();
                 //print("Grab" + holding.name);
             }
+
+            //if(hand.GrabStrength> grabTresh)
+            //{
+            //    lightSaber.SetActive(true);
+            //}
+            //else
+            //    lightSaber.SetActive(false);
         }
         else
         {

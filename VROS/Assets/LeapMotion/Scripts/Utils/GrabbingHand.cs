@@ -97,7 +97,7 @@ public class GrabbingHand : MonoBehaviour
             !thing.transform.IsChildOf(transform) &&
             thing.transform.tag != "NotGrabbable")
         {
-
+            //
             GrabbableObject grabbable = thing.transform.GetComponent<GrabbableObject>();
             if (grabbable == null || !grabbable.IsGrabbed()) return thing.collider;
         }
@@ -118,7 +118,7 @@ public class GrabbingHand : MonoBehaviour
             if (old_grabbable != null)
                 old_grabbable.OnStopHover();
         }
-
+       //hi!!!!hhhh kiii [oewq
         if (hover != null)
         {
             GrabbableObject new_grabbable = hover.GetComponent<GrabbableObject>();
@@ -164,7 +164,7 @@ public class GrabbingHand : MonoBehaviour
         object_pinch_offset_ = Quaternion.Inverse(active_object_.transform.rotation) *
                                object_pinch_offset_;
         rotation_from_palm_ = Quaternion.Inverse(palm_rotation_) * active_object_.transform.rotation;
-
+        //
         // If we can rotate the object quickly, increase max angular velocity for now.
         if (grabbable == null || grabbable.rotateQuickly)
         {

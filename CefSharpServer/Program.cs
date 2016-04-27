@@ -18,7 +18,7 @@ namespace CefSharpServer
         const int Port = 8084;
         static ChromiumWebBrowser browser;
         [STAThread]
-        public static void Main(string[] args)
+        public static void Main()
         {
             if (!Cef.IsInitialized)
                 Cef.Initialize(new CefSettings()
@@ -37,6 +37,10 @@ namespace CefSharpServer
             browser.Load("en.m.wikipedia.org");
 
             browser.Load("http://www.timeanddate.com/worldclock/fullscreen.html?n=3704");
+            browser.Load("https://en.m.wikipedia.org/wiki/Virtual_reality");
+
+            browser.Load("https://m.reddit.com");
+
             browser.NewScreenshot += Browser_NewScreenshot;
             
             Log("Hello");

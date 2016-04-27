@@ -6,8 +6,12 @@ public class PlayVideo : MonoBehaviour {
 	void Start () {
         var mat = GetComponent<Renderer>().material;
         var movie = (MovieTexture)mat.mainTexture;
+        var audio = GetComponent<AudioSource>();
+        movie.Stop();
+        audio.Stop();
+
         movie.Play();
-        GetComponent<AudioSource>().Play();
+        audio.Play();
 	}
 	
 	// Update is called once per frame

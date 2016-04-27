@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace DesktopServer
 {
-    class Program
+    public class Program
     {
         const int Port = 7117;
 
@@ -86,7 +86,7 @@ namespace DesktopServer
             }
         }
 
-        static void Main(string[] args)
+        public static void Main()
         {
             using (HttpListener listener = new HttpListener())
             {

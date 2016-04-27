@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspServer", "AspServer\AspS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefSharpServer", "CefSharpServer\CefSharpServer.csproj", "{353F6215-0C47-4C39-8CBE-D7DB8368F4E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartBoth", "StartBoth\StartBoth.csproj", "{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{353F6215-0C47-4C39-8CBE-D7DB8368F4E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{353F6215-0C47-4C39-8CBE-D7DB8368F4E6}.Release|x64.ActiveCfg = Release|x64
 		{353F6215-0C47-4C39-8CBE-D7DB8368F4E6}.Release|x64.Build.0 = Release|x64
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A4F5C66-61F2-4FF1-89C8-3E44E242275C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
