@@ -90,7 +90,7 @@ namespace DesktopServer
         {
             using (HttpListener listener = new HttpListener())
             {
-                listener.Prefixes.Add($"http://*:{Port}/");
+                listener.Prefixes.Add($"http://localhost:{Port}/");
                 listener.Start();
                 while (listener.IsListening)
                 {

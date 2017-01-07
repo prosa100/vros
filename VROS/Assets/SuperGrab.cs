@@ -40,7 +40,6 @@ public class SuperGrab : MonoBehaviour
             transform.LookAt(Camera.main.transform.position);
             transform.forward *= -1;
         }
-        print(angle);
         //hELLOW wORLD COOL Hello I am coding!
         //Hi this is the codes!!
         //Look at my codes!

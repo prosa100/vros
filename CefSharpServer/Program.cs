@@ -15,9 +15,19 @@ namespace CefSharpServer
 {
     public class Program 
     {
-        const int Port = 8084;
+        const int Port = 6661;
+        const int Size = 1024;
         static ChromiumWebBrowser browser;
+        static HttpListener listener;
+
+        private static void OnQuit(object sender, EventArgs e)
+        {
+            listener.Stop();
+            Cef.Shutdown();
+        }
+
         [STAThread]
+
         public static void Main()
         {
             if (!Cef.IsInitialized)
@@ -28,25 +38,27 @@ namespace CefSharpServer
             else
                 Log("Why?");
 
-            
+            AppDomain.CurrentDomain.ProcessExit += OnQuit;
             browser = new ChromiumWebBrowser();
-            browser.Size = new Size(512, 512);
+            browser.Size = new Size(Size, Size);
            
             while (!browser.IsBrowserInitialized)
                 Thread.Sleep(0);
-            browser.Load("en.m.wikipedia.org");
+            //browser.Load("en.m.wikipedia.org");
 
             browser.Load("http://www.timeanddate.com/worldclock/fullscreen.html?n=3704");
-            browser.Load("https://en.m.wikipedia.org/wiki/Virtual_reality");
+            //browser.Load("https://en.m.wikipedia.org/wiki/Virtual_reality");
 
-            browser.Load("https://m.reddit.com");
+            //browser.Load("https://m.reddit.com");
+            //browser.Load(@"http://learningwebgl.com/lessons/lesson05/index.html");
 
+            
             browser.NewScreenshot += Browser_NewScreenshot;
             
             Log("Hello");
-            using (HttpListener listener = new HttpListener())
+            using (listener = new HttpListener())
             {
-                listener.Prefixes.Add($"http://*:{Port}/");
+                listener.Prefixes.Add($"http://localhost:{Port}/");
                 listener.Start();
                 while (listener.IsListening)
                 {
@@ -60,6 +72,8 @@ namespace CefSharpServer
                      *         -- scrolls 50 px up, down, left or right.
                      */
                     var ctx  = listener.GetContext();
+                    
+
                     var rqst = ctx.Request.RawUrl;
                     int indx = rqst.IndexOf("?")  - 1;
                     string cmd;
@@ -114,6 +128,7 @@ namespace CefSharpServer
 
                     ctx.Response.ContentType = "image/png";
                     ctx.Response.StatusCode = 200;
+                    var bufferT = buffer;
                     buffer.Position = 0;
                     buffer.CopyTo(ctx.Response.OutputStream);
                     ctx.Response.OutputStream.Close();
@@ -121,14 +136,36 @@ namespace CefSharpServer
             }
         }
 
-        static MemoryStream buffer = new MemoryStream(512 * 512 * 4);
+        static bool swap;
+
+        static MemoryStream buffer { get { return swap ? buffera : bufferb; } }
+        static MemoryStream backbuffer { get { return (!swap) ? buffera : bufferb; } }
+        static MemoryStream bufferb = new MemoryStream(Size * Size * 4);
+        static MemoryStream buffera = new MemoryStream(Size * Size * 4);
+        static int ongoingScreenshots = 0;
+
+        static DateTime last = DateTime.Now;
 
         private static void Browser_NewScreenshot(object sender, EventArgs e)
         {
-            buffer.SetLength(0);//semi-clear. Does not have to be too fast.
+            var now = DateTime.Now;
+            Log(1 / (now - last).TotalSeconds + "hz");
+            last = now;
+
+
+            var iAm = Interlocked.Increment(ref ongoingScreenshots);
+            if (iAm > 1)
+                Log("Theading error!!!");
+
             var screenShot = browser.ScreenshotOrNull();
-            screenShot.Save(buffer, ImageFormat.Png);
-            screenShot.Dispose();
+            if (screenShot != null)
+            {
+                backbuffer.SetLength(0);//'clear'
+                screenShot.Save(backbuffer, ImageFormat.Png);
+                screenShot.Dispose();
+                swap ^= true;
+            }
+            Interlocked.Decrement(ref ongoingScreenshots);
         }
        
      
